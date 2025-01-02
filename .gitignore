@@ -1,0 +1,6 @@
+#Ignore all the files created from C output 
+*.o
+*.out
+*.exe
+.vscode/
+.DS_Store
