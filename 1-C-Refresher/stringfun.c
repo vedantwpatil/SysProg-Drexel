@@ -15,6 +15,7 @@ int count_words(char *, int, int);
 // add additional prototypes here
 int reverse_string(char *, int, int);
 int word_print(char *, int, int);
+int str_replace(char *, int, int, char *, char *);
 
 int setup_buff(char *buff, char *user_str, int len) {
   // TODO: #4:  Implement the setup buff as per the directions
@@ -27,7 +28,8 @@ int setup_buff(char *buff, char *user_str, int len) {
 
     if (buff_pos >= len) {
       // Fails if the user string is larger than the buffer size
-      return -1;
+      // Buffer overflow
+      return 4;
     }
 
     char current = *(user_str + str_poss);
@@ -80,26 +82,30 @@ int count_words(char *buff, int len, int str_len) {
   for (int i = 0; i < str_len; i++) {
     char current = *(buff + i);
 
+    // Check if we are inbetween a word
     if (!word_start) {
+
+      // Check for whitespace and if we aren't then we're in a word
       if (current == ' ') {
         continue;
-      } else {
+      }
+
+      else {
         wc++;
         word_start = true;
       }
-    } else {
-      if (current == ' ') {
-        word_start = false;
-      }
+
+    } else if (current == ' ') {
+      word_start = false;
     }
   }
-  return wc;
+  return 0;
 }
 
 int reverse_string(char *buff, int len, int str_len) {
   // Error checking
   if (str_len <= 0 || str_len > len) {
-    return -1;
+    return 3;
   }
 
   int start_idx = 0;
@@ -155,6 +161,89 @@ int word_print(char *buff, int len, int str_len) {
   }
 
   return 0;
+}
+
+int str_replace(char *buff, int len, int str_len, char *target, char *replace) {
+
+  // Check if replacement would exceed buffer
+  int target_len = 0;
+  int replace_len = 0;
+
+  char *p_target = target;
+  char *p_replace = replace;
+
+  // Get the lengths of the target and replace strings
+  while (*p_target != '\0') {
+    target_len++;
+    p_target++;
+  }
+  while (*p_replace != '\0') {
+    replace_len++;
+    p_replace++;
+  }
+
+  int new_len = str_len - target_len + replace_len;
+  if (new_len > len) {
+    return 4; // Buffer overflow
+  }
+
+  // Find substring
+  char *match_pos = NULL;
+  char *curr_pos = buff;
+
+  while (*curr_pos && curr_pos < buff + str_len) {
+    if (*curr_pos == *target) {
+      char *buff_ptr = curr_pos;
+      char *target_ptr = target;
+
+      // Compare characters
+      while (*buff_ptr && *target_ptr && *buff_ptr == *target_ptr) {
+        buff_ptr++;
+        target_ptr++;
+      }
+
+      // Found match if target_ptr reached end
+      if (!*target_ptr) {
+        match_pos = curr_pos;
+        break;
+      }
+    }
+    curr_pos++;
+  }
+
+  if (match_pos) {
+    // Calculate shift amount
+    int shift = replace_len - target_len;
+
+    if (shift < 0) {
+      // Replacement is shorter - shift left
+      char *src = match_pos + target_len;
+      char *dst = match_pos + replace_len;
+
+      while (src < buff + str_len) {
+        *dst++ = *src++;
+      }
+    } else if (shift > 0) {
+      // Replacement is longer - shift right
+      char *src = buff + str_len - 1;
+      char *dst = src + shift;
+
+      while (src >= match_pos + target_len) {
+        *dst-- = *src--;
+      }
+    }
+
+    // Copy replacement string
+    char *p_rep = replace;
+    curr_pos = match_pos;
+    while (*p_rep) {
+      *curr_pos++ = *p_rep++;
+    }
+
+    return 0;
+  }
+
+  return 1; // No replacement made
 }
 
 // ADD OTHER HELPER FUNCTIONS HERE FOR OTHER REQUIRED PROGRAM OPTIONS
@@ -235,6 +324,13 @@ int main(int argc, char *argv[]) {
       printf("Error printing string, rc = %d", rc);
       exit(2);
     }
+    break;
+  case 'x':
+    if (argc != 5) {
+      printf("Error replacing string, rc = %d", rc);
+      exit(2);
+    }
+    rc = str_replace(buff, BUFFER_SZ, user_str_len, *(argv + 3), *(argv + 4));
     break;
   default:
     usage(argv[0]);
