@@ -16,4 +16,5 @@ https://github.com/vedantwpatil/SysProg-Drexel
 4. Briefly describe what you want to get our of this class. 
 I want to get a better understanding of the lower levels of my computer and get more comfortable with the abstractions we take for granted in modern software 
 
-5. Difficulty asking for help/further clarification 
+5. Briefly describe any concerns you might be having with being successful in this class (if any) 
+Mainly just asking for help on assignments ahead of time 
