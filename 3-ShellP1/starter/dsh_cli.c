@@ -44,12 +44,30 @@
  *
  *  See the provided test cases for output expectations.
  */
-int main()
-{
-    char *cmd_buff;
-    int rc = 0;
-    command_list_t clist;
+int main() {
+  char *buff;
+  int rc = 0;
+  command_list_t clist;
 
-    printf(M_NOT_IMPL);
-    exit(EXIT_NOT_IMPL);
+  while (1) {
+
+    printf("%s", SH_PROMPT);
+
+    if (fgets(buff, ARG_MAX, stdin) == NULL) {
+      printf("\n");
+      break;
+    }
+
+    buff[strcspn(buff, "\n")] = '\0';
+    char *token = strtok(buff, SPACE_CHAR);
+
+    while (token != NULL) {
+      // Parse the command
+      if (token == EXIT_CMD) {
+        exit(0);
+      }
+
+      char *token = strtok(NULL, SPACE_CHAR);
+    }
+  }
 }

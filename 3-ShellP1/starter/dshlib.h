@@ -8,20 +8,18 @@
 // Longest command that can be read from the shell
 #define SH_CMD_MAX EXE_MAX + ARG_MAX
 
-typedef struct command
-{
-    char exe[EXE_MAX];
-    char args[ARG_MAX];
+typedef struct command {
+  char exe[EXE_MAX];
+  char args[ARG_MAX];
 } command_t;
 
-typedef struct command_list
-{
-    int num;
-    command_t commands[CMD_MAX];
+typedef struct command_list {
+  int num;
+  command_t commands[CMD_MAX];
 } command_list_t;
 
 // Special character #defines
-#define SPACE_CHAR ' '
+#define SPACE_CHAR " "
 #define PIPE_CHAR '|'
 #define PIPE_STRING "|"
 

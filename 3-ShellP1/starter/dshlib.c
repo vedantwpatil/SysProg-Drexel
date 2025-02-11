@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "dshlib.h"
 
@@ -32,8 +32,4 @@
  *  Standard Library Functions You Might Want To Consider Using
  *      memset(), strcmp(), strcpy(), strtok(), strlen(), strchr()
  */
-int build_cmd_list(char *cmd_line, command_list_t *clist)
-{
-    printf(M_NOT_IMPL);
-    return EXIT_NOT_IMPL;
-}
+int build_cmd_list(char *cmd_line, command_list_t *clist) {}
