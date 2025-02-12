@@ -45,9 +45,14 @@
  *  See the provided test cases for output expectations.
  */
 int main() {
-  char *buff;
+  char *buff = malloc(SH_CMD_MAX + 1);
   int rc = 0;
   command_list_t clist;
+
+  if (buff == NULL) {
+    printf("Issue allocating memory");
+    exit(0);
+  }
 
   while (1) {
 
