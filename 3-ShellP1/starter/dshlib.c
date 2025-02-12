@@ -32,4 +32,57 @@
  *  Standard Library Functions You Might Want To Consider Using
  *      memset(), strcmp(), strcpy(), strtok(), strlen(), strchr()
  */
-int build_cmd_list(char *cmd_line, command_list_t *clist) {}
+int build_cmd_list(char *cmd_line, command_list_t *clist) {
+  clist->num = 0;
+
+  // Error checking
+  if (strlen(cmd_line) == 0) {
+    return WARN_NO_CMDS;
+  }
+
+  char *cmd_copy = strdup(cmd_line);
+  char *pipe_token = strtok(cmd_copy, PIPE_STRING);
+
+  // Process each command separated by pipes
+  while (pipe_token != NULL) {
+    if (clist->num >= CMD_MAX) {
+      free(cmd_copy);
+      return ERR_TOO_MANY_COMMANDS;
+    }
+
+    // Trim leading/trailing spaces
+    while (*pipe_token == ' ')
+      pipe_token++;
+    char *end = pipe_token + strlen(pipe_token) - 1;
+    while (end > pipe_token && *end == ' ')
+      end--;
+    *(end + 1) = '\0';
+
+    // Split command and arguments
+    char *space_pos = strchr(pipe_token, ' ');
+    if (space_pos) {
+
+      // Command has arguments
+      int cmd_len = space_pos - pipe_token;
+      strncpy(clist->commands[clist->num].exe, pipe_token, cmd_len);
+      clist->commands[clist->num].exe[cmd_len] = '\0';
+
+      // Copy arguments, skipping leading spaces
+      space_pos++;
+      while (*space_pos == ' ')
+        space_pos++;
+      strncpy(clist->commands[clist->num].args, space_pos, ARG_MAX - 1);
+    } else {
+
+      // Command without arguments
+      strncpy(clist->commands[clist->num].exe, pipe_token, EXE_MAX - 1);
+      clist->commands[clist->num].args[0] = '\0';
+    }
+
+    clist->num++;
+    pipe_token = strtok(NULL, PIPE_STRING);
+  }
+
+  free(cmd_copy);
+  return OK;
+}

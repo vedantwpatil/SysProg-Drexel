@@ -59,15 +59,28 @@ int main() {
     }
 
     buff[strcspn(buff, "\n")] = '\0';
-    char *token = strtok(buff, SPACE_CHAR);
 
-    while (token != NULL) {
-      // Parse the command
-      if (token == EXIT_CMD) {
-        exit(0);
+    if (strcmp(buff, EXIT_CMD) == 0) {
+      exit(0);
+    }
+
+    rc = build_cmd_list(buff, &clist);
+
+    if (rc == OK) {
+      printf(CMD_OK_HEADER, clist.num);
+      for (int i = 0; i < clist.num; i++) {
+        printf("<%d> %s", i + 1, clist.commands[i].exe);
+        if (clist.commands[i].args[0] != '\0') {
+          printf(" [%s]", clist.commands[i].args);
+        }
+        printf("\n");
       }
-
-      char *token = strtok(NULL, SPACE_CHAR);
+    } else if (rc == WARN_NO_CMDS) {
+      printf(CMD_WARN_NO_CMD);
+    } else if (rc == ERR_TOO_MANY_COMMANDS) {
+      printf(CMD_ERR_PIPE_LIMIT, CMD_MAX);
     }
   }
+
+  return 0;
 }
