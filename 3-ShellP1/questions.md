@@ -27,4 +27,3 @@
 - How should our custom shell handle errors from commands that fail? Consider cases where a command outputs both STDOUT and STDERR. Should we provide a way to merge them, and if so, how?
 
   > **Answer**: _start here_
-
