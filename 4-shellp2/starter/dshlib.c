@@ -273,8 +273,8 @@ int exec_local_cmd_loop() {
       // Handle external command with fork/exec
       pid_t pid = fork();
 
+      // Fork failed
       if (pid < 0) {
-        // Fork failed
         fprintf(stderr, "Fork failed\n");
         continue;
       } else if (pid == 0) {
