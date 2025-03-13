@@ -182,8 +182,9 @@ int exec_local_cmd_loop() {
         }
       } else {
         // Multiple commands with pipes
-        int pipes[CMD_MAX - 1][2]; // Array of pipes for connecting commands
-        pid_t pids[CMD_MAX];       // Array to store child process IDs
+        int pipes[CMD_MAX - 1]
+                 [2]; // Ackeup update rray of pipes for connecting commands
+        pid_t pids[CMD_MAX]; // Array to store child process IDs
 
         // Create all the necessary pipes
         for (int i = 0; i < cmd_count - 1; i++) {
